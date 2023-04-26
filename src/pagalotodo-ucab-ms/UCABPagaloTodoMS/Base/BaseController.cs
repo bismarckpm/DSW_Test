@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace UCABPagaloTodoMS.Base
 {
@@ -81,6 +81,37 @@ namespace UCABPagaloTodoMS.Base
         protected NoContentResult Response204()
         {
             return NoContent();
+        }
+
+        [NonAction]
+        protected OkObjectResult Response200<T>(Respuesta respuestaOperacion, T data)
+        {
+            return Ok(new Response200<T>(respuestaOperacion, data));
+        }
+
+        [NonAction]
+        protected BadRequestObjectResult Response400(Respuesta respuestaOperacion, string message, string exception, string innerException)
+        {
+            return BadRequest(new Response400(respuestaOperacion, message, exception, innerException));
+        }
+
+        [NonAction]
+        protected Respuesta NewResponseOperation()
+        {
+            return new Respuesta(Guid.NewGuid(), ControllerActionName());
+        }
+
+        private string ControllerActionName()
+        {
+            try
+            {
+                return base.ControllerContext.ActionDescriptor.ControllerName + "/" + base.ControllerContext.ActionDescriptor.ActionName;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return "Controller/Action";
+            }
         }
     }
 }
