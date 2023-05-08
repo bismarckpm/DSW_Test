@@ -1,5 +1,6 @@
-﻿using MediatR;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Application.Queries;
 using UCABPagaloTodoMS.Application.Requests;
@@ -43,12 +44,13 @@ namespace UCABPagaloTodoMS.Controllers
             {
                 var query = new ConsultarValoresPruebaQuery();
                 var response = await _mediator.Send(query);
-                return Ok(response);
+                //return Ok(response);
+                return Response200(NewResponseOperation(),response);
             }
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error en la consulta de los valores de prueba. Exception: " + ex);
-                throw;
+                return BadRequest(ex.Message);
             }
         }
 
@@ -76,12 +78,47 @@ namespace UCABPagaloTodoMS.Controllers
             {
                 var query = new AgregarValorPruebaCommand(valor);
                 var response = await _mediator.Send(query);
-                return Ok(response);
+                return Response200(NewResponseOperation(),response);
             }
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un valor de prueba. Exception: " + ex);
-                throw;
+                return Response400(NewResponseOperation(), ex.Message,
+                    "Ocurrio un error al intentar registrar un valor de prueba", ex.InnerException?.ToString());
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint para la consulta valores de prueba por nombre
+        /// </summary>
+        /// <remarks>
+        ///     ## Description
+        ///     ### Get valores de prueba por nombre
+        ///     ## Url
+        ///     GET /ejemplo/valores/ana
+        /// </remarks>
+        /// <response code="200">
+        ///     Accepted:
+        ///     - Operation successful.
+        /// </response>
+        /// <returns>Retorna la lista de valores que pose.</returns>
+        [HttpGet("valores/{nombre}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<ValoresResponse>>> ConsultaValoresPorNombre([Required][FromRoute] string nombre )
+        {
+            _logger.LogInformation("Entrando al método que consulta los valores por nombre.");
+            try
+            {
+                var query = new ConsultarValoresPorNombreQuery(nombre);
+                var response = await _mediator.Send(query);
+                //return Ok(response);
+                return Response200(NewResponseOperation(), response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error en la consulta de los valores por nombre. Exception: " + ex);
+                return Response400(NewResponseOperation(), ex.Message, "Ha ocurrido un error", ex.InnerException?.ToString());
             }
         }
     }

@@ -24,9 +24,4 @@
     <ProjectReference Include="..\UCABPagaloTodoMS.Infrastructure\UCABPagaloTodoMS.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Queries\" />
-    <Folder Include="Validators\" />
-  </ItemGroup>
-
 </Project>

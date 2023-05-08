@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Application.Handlers.Queries;
@@ -10,9 +10,9 @@ namespace UCABPagaloTodoMS.Application.Handlers.Commands
     public class AgregarValorePruebaCommandHandler : IRequestHandler<AgregarValorPruebaCommand, Guid>
     {
         private readonly IUCABPagaloTodoDbContext _dbContext;
-        private readonly ILogger<ConsultarValoresQueryHandler> _logger;
+        private readonly ILogger<AgregarValorePruebaCommandHandler> _logger;
 
-        public AgregarValorePruebaCommandHandler(IUCABPagaloTodoDbContext dbContext, ILogger<ConsultarValoresQueryHandler> logger)
+        public AgregarValorePruebaCommandHandler(IUCABPagaloTodoDbContext dbContext, ILogger<AgregarValorePruebaCommandHandler> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -22,10 +22,11 @@ namespace UCABPagaloTodoMS.Application.Handlers.Commands
         {
             try
             {
-                if (request._request == null)
+                if (string.IsNullOrEmpty(request._request.Apellido))
                 {
+
                     _logger.LogWarning("ConsultarValoresQueryHandler.Handle: Request nulo.");
-                    throw new ArgumentNullException(nameof(request));
+                    throw new ArgumentNullException("Valores.Apellido", "Apellido es requerido");
                 }
                 else
                 {

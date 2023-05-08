@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using System.Reflection;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Core.Entities;
@@ -15,6 +15,7 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
     }
 
     public virtual DbSet<ValoresEntity> Valores { get; set; } = null!;
+    public virtual DbSet<CuentasEntity> Cuentas { get; set; } = null!;
 
     public DbContext DbContext
     {

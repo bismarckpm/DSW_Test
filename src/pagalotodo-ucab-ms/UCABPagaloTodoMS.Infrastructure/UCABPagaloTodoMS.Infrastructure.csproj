@@ -48,7 +48,6 @@
   <ItemGroup>
     <Folder Include="Database\Configuration\" />
     <Folder Include="Migrations\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

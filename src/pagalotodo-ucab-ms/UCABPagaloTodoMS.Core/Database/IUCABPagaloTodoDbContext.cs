@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using UCABPagaloTodoMS.Core.Entities;
 
 namespace UCABPagaloTodoMS.Core.Database
@@ -6,6 +6,7 @@ namespace UCABPagaloTodoMS.Core.Database
     public interface IUCABPagaloTodoDbContext
     {
         DbSet<ValoresEntity> Valores { get; }
+        DbSet<CuentasEntity> Cuentas { get; }
 
         DbContext DbContext
         {
