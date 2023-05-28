@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using RestSharp;
 using MediatR;
 using UCABPagaloTodoMS.Application.Handlers.Queries;
+using MassTransit;
+using UCABPagaloTodoMS.Application.Consumers;
+using RabbitMQ.Client;
 
 namespace UCABPagaloTodoMS;
 
@@ -31,6 +34,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+
         services.AddCors(options =>
         {
             options.AddPolicy(_allowAllOriginsPolicy,
@@ -49,9 +53,18 @@ public class Startup
         services.AddTransient<IUCABPagaloTodoDbContext, UCABPagaloTodoDbContext>();
 
         services.AddProviders(Configuration, Folder, _appSettings, environment);
+        services.AddHostedService<ConsumerValor>();
 
         services.AddMediatR(
        typeof(ConsultarValoresQueryHandler).GetTypeInfo().Assembly);
+
+        services.AddSingleton(serviceProvider =>
+         {
+             return new ConnectionFactory
+             {
+                 HostName = "localhost"
+             };
+         });
     }
 
     public void Configure(IApplicationBuilder app)
